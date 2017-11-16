@@ -58,8 +58,8 @@ public class UserDaoImpl implements UserDao {
 			Date dobDate = formatter.parse(dob);
 			SimpleDateFormat sdf = new SimpleDateFormat(Constants.requiredDateFormate);
 			user.setDob(sdf.format(dobDate));
-			BeanUtils.copyProperties(userEntity, user);
-			// BeanUtils.copyProperties(addressEntity, user.getAddressVo());
+			BeanUtils.copyProperties(user,userEntity );
+			// BeanUtils.copyProperties(user.getAddressVo(),addressEntity);
 			addressEntity.setDoorNo(user.getAddressVo().getDoorNo());
 			addressEntity.setPinCode(user.getAddressVo().getPinCode());
 			addressEntity.setStreet(user.getAddressVo().getStreet());
@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
 			if (userEntityList != null && userEntityList.size() > 0) {
 				for (User userEntity : userEntityList) {
 					UserVo user = new UserVo();
-					BeanUtils.copyProperties(user, userEntity);
+					BeanUtils.copyProperties(userEntity,user);
 					if (userEntity.getAddress() != null) {
 						AddressVo address = new AddressVo();
 						// BeanUtils.copyProperties(address,
@@ -114,7 +114,7 @@ public class UserDaoImpl implements UserDao {
 						if (userEntity.getAddress().getCity() != null) {
 							City cityEntity = userEntity.getAddress().getCity();
 							CityVo cityVo = new CityVo();
-							BeanUtils.copyProperties(cityVo, cityEntity);
+							BeanUtils.copyProperties(cityEntity,cityVo);
 							/*
 							 * cityVo.setDescription(cityEntity.getDescription()
 							 * ); cityVo.setId(cityEntity.getId());
@@ -125,12 +125,12 @@ public class UserDaoImpl implements UserDao {
 							if (userEntity.getAddress().getCity().getState() != null) {
 								State stateEntity = userEntity.getAddress().getCity().getState();
 								StateVo stateVo = new StateVo();
-								BeanUtils.copyProperties(stateVo, stateEntity);
+								BeanUtils.copyProperties(stateEntity,stateVo);
 								address.setState(stateVo);
 								if (userEntity.getAddress().getCity().getState().getCountry() != null) {
 									Country countryEntity = userEntity.getAddress().getCity().getState().getCountry();
 									CountryVo countryVo = new CountryVo();
-									BeanUtils.copyProperties(countryEntity, countryEntity);
+									BeanUtils.copyProperties(countryEntity,countryEntity);
 								} else {
 									log.debug("Country is null for user with mobile number ->"
 											+ userEntity.getMobileNumber());
@@ -169,8 +169,8 @@ public class UserDaoImpl implements UserDao {
 			User userEntity = new User();
 			Address addressEntity = new Address();
 
-			BeanUtils.copyProperties(userEntity, user);
-			BeanUtils.copyProperties(addressEntity, user.getAddressVo());
+			BeanUtils.copyProperties(user,userEntity);
+			BeanUtils.copyProperties(user.getAddressVo(),addressEntity);
 			City cityEntity = hibernateTemplate.load(City.class, user.getAddressVo().getCity().getId());
 			addressEntity.setCity(cityEntity);
 			hibernateTemplate.update(addressEntity);
